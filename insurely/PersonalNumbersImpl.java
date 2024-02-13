@@ -33,20 +33,6 @@ public class PersonalNumbersImpl implements PersonalNumbers {
 
     /*
      * @param personalNumber
-     * @param character
-     * @return personal number without (-/+)
-     */
-    private static String removeSeparator (String personalNumber, String character){
-        String stringProcessed = personalNumber;
-
-        if (personalNumber.contains(character)){
-            stringProcessed = personalNumber.replaceAll(character, "");
-        }
-        return stringProcessed;
-    }
-
-    /*
-     * @param personalNumber
      * @return personal number has a correct serial number
      */
     private static boolean isValidLuhn(String personalNumber) {
@@ -121,8 +107,8 @@ public class PersonalNumbersImpl implements PersonalNumbers {
             return formattedPersonalNumber;
         }
 
-        formattedPersonalNumber = removeSeparator(personalNumber, "-");
-        formattedPersonalNumber = removeSeparator(formattedPersonalNumber, "+");
+        formattedPersonalNumber = personalNumber.replaceAll("-", "");
+        formattedPersonalNumber = formattedPersonalNumber.replaceAll("\\+", "");
     
         if (formattedPersonalNumber.length()<10 || formattedPersonalNumber.length()>12){
             formattedPersonalNumber = insurely.PersonalNumbersMessages.ERROR_MSG_FORMAT;
