@@ -5,16 +5,19 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.lang.String;
 
-public class PersonalNumbersImpl implements PersonalNumbers {
-    
-    public static String verifyPersonalNumberSweden(String personalNumber) {
+public class CodeImpl {
+
+    public static String validatePersonalNumberSweden(String personalNumber) {
 
         if (personalNumber.isEmpty()){
             return insurely.PersonalNumbersMessages.ERROR_MSG_FORMAT;
         }
-        
-        // Check if the input matches the pattern
-        if (!Pattern.matches(insurely.PersonalNumbersRegExpressions.swedishPatternTen, personalNumber) && !Pattern.matches(insurely.PersonalNumbersRegExpressions.swedishPatternTwelve, personalNumber)){
+
+        for (String swedishPersonalNumberRegularExpression : insurely.PersonalNumbersRegExpressions.swedishPersonalNumberRegularExpressions){
+            // Check if the input matches the pattern
+            if (Pattern.matches(swedishPersonalNumberRegularExpression, personalNumber)){
+                break;
+            }
             return insurely.PersonalNumbersMessages.ERROR_MSG_FORMAT;
         }
 
@@ -57,7 +60,7 @@ public class PersonalNumbersImpl implements PersonalNumbers {
      * @param personalNumber
      * @return true if birthdate is valid
      */
-    private static boolean isValidDateSweden(String personalNumber) {
+    public static boolean isValidDateSweden(String personalNumber) {
 
         if (personalNumber.isEmpty()){
             return false;
@@ -125,7 +128,7 @@ public class PersonalNumbersImpl implements PersonalNumbers {
         return formattedPersonalNumber;
     }
 
-    public static String verifyNameSweden (String name, String countryCode){
+    public static String validateNameSweden (String name){
         if (!Pattern.matches(insurely.PersonalNumbersRegExpressions.swedishNameOrSurname, name)){
             return insurely.PersonalNumbersMessages.ERROR_PERSON_NAME;
         }
