@@ -14,7 +14,12 @@ class PersonalNumber extends Code {
     }
 
     public String validateRule() {
-        return insurely.CodeImpl.validatePersonalNumberSweden(personalNumber);
+        try {
+            return insurely.CodeImpl.validatePersonalNumberSweden(personalNumber);
+        } catch (insurelyException e) {
+            System.out.println("Validation error: " + e.getMessage());
+        }
+        return personalNumber;
     }
 }
 
@@ -23,7 +28,12 @@ class SwedishName extends Code {
     String swedishName;
 
     String validateRule() {
-        return insurely.CodeImpl.validateNameSweden(swedishName);
+        try {
+            return insurely.CodeImpl.validateNameSweden(swedishName);
+        } catch (insurelyException e) {
+            System.out.println("Validation error: " + e.getMessage());
+        }
+        return swedishName;
     }
     
 }

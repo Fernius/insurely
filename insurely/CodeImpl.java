@@ -7,28 +7,32 @@ import java.lang.String;
 
 public class CodeImpl {
 
-    public static String validatePersonalNumberSweden(String personalNumber) {
+    public static String validatePersonalNumberSweden(String personalNumber) throws insurelyException {
 
         if (personalNumber.isEmpty()){
-            return insurely.PersonalNumbersMessages.ERROR_MSG_FORMAT;
+            throw new insurelyException(ErrorType.ERROR_MSG_FORMAT);
         }
 
+        Boolean isMatch = false;
         for (String swedishPersonalNumberRegularExpression : insurely.PersonalNumbersRegExpressions.swedishPersonalNumberRegularExpressions){
             // Check if the input matches the pattern
             if (Pattern.matches(swedishPersonalNumberRegularExpression, personalNumber)){
-                break;
+                isMatch = true;
             }
-            return insurely.PersonalNumbersMessages.ERROR_MSG_FORMAT;
+        }
+
+        if (!isMatch){
+            throw new insurelyException(ErrorType.ERROR_MSG_FORMAT);
         }
 
         String formattedPersonalNumber = formatPersonalNumberSweden(personalNumber);
 
         if (!isValidDateSweden(formattedPersonalNumber)){
-            return insurely.PersonalNumbersMessages.ERROR_MSG_DATE;
+            throw new insurelyException(ErrorType.ERROR_MSG_DATE);
         }
 
         if (!isValidLuhn(formattedPersonalNumber)){
-            return insurely.PersonalNumbersMessages.ERROR_MSG_LUHN;
+            throw new insurelyException(ErrorType.ERROR_MSG_LUHN);
         }
             
         return insurely.PersonalNumbersMessages.SUCCESS_PERSONAL_NUMBER;
@@ -102,20 +106,18 @@ public class CodeImpl {
      * @param personalNumber
      * @return birthdate in yyyyMMdd format
      */
-    private static String formatPersonalNumberSweden (String personalNumber){
+    private static String formatPersonalNumberSweden (String personalNumber) throws insurelyException{
         String formattedPersonalNumber = null;
 
         if (personalNumber.isEmpty()){
-            formattedPersonalNumber = insurely.PersonalNumbersMessages.ERROR_MSG_FORMAT;
-            return formattedPersonalNumber;
+            throw new insurelyException(ErrorType.ERROR_MSG_FORMAT);
         }
 
         formattedPersonalNumber = personalNumber.replaceAll("-", "");
         formattedPersonalNumber = formattedPersonalNumber.replaceAll("\\+", "");
     
         if (formattedPersonalNumber.length()<10 || formattedPersonalNumber.length()>12){
-            formattedPersonalNumber = insurely.PersonalNumbersMessages.ERROR_MSG_FORMAT;
-            return formattedPersonalNumber;
+            throw new insurelyException(ErrorType.ERROR_MSG_FORMAT);
         }
 
         if (formattedPersonalNumber.length()<11){
@@ -128,9 +130,9 @@ public class CodeImpl {
         return formattedPersonalNumber;
     }
 
-    public static String validateNameSweden (String name){
+    public static String validateNameSweden (String name) throws insurelyException{
         if (!Pattern.matches(insurely.PersonalNumbersRegExpressions.swedishNameOrSurname, name)){
-            return insurely.PersonalNumbersMessages.ERROR_PERSON_NAME;
+            throw new insurelyException(ErrorType.ERROR_PERSON_NAME);
         }
         return insurely.PersonalNumbersMessages.SUCCESS_PERSON_NAME;
     }
